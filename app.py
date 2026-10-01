@@ -8,11 +8,15 @@ def index():
     if request.method == 'POST':
         try:
             # Retrieve inputs from HTML form
-            weight = float(request.form.get('weight'))
-            height_cm = float(request.form.get('height'))
-            age = int(request.form.get('age'))
+            weight_str = request.form.get('weight')
+            height_str = request.form.get('height')
+            age_str = request.form.get('age')
             gender = request.form.get('gender')
             activity = float(request.form.get('activity'))
+
+            weight = float(weight_str)
+            height_cm = float(height_str)
+            age = int(age_str)
 
             # 1. BMI Calculation
             height_m = height_cm / 100
@@ -40,12 +44,18 @@ def index():
 
             daily_calories = round(bmr * activity)
 
+            # Store results along with original inputs to refill form
             result = {
                 'bmi': bmi,
                 'category': category,
                 'category_class': category_class,
                 'bmr': round(bmr),
-                'daily_calories': daily_calories
+                'daily_calories': daily_calories,
+                'weight': weight_str,
+                'height': height_str,
+                'age': age_str,
+                'gender': gender,
+                'activity': str(activity)
             }
         except (ValueError, TypeError):
             result = {'error': 'Invalid input. Please enter valid numbers.'}
